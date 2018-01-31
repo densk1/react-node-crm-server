@@ -1,0 +1,30 @@
+// => https://blog.jscrambler.com/implementing-jwt-using-passport/
+
+// index.js
+const express = require("express");  
+const bodyParser = require("body-parser");  
+const auth = require("./auth.js")();  
+const app = express();
+const authRoutes = require('./routes/authRoutes.js')(auth);
+const teamRoutes = require('./routes/teamRoutes.js')(auth);
+
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
+app.use(bodyParser.json());  
+app.use(auth.initialize());
+
+app.use('/', authRoutes);
+app.use('/team', teamRoutes);
+
+
+app.all('*', function (req, res) {
+	res.status(404).send("No route exists!");
+})
+
+app.listen(3000, function() {  
+    console.log("My API is running... 3000");
+});
