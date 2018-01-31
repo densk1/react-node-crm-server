@@ -18,7 +18,10 @@ module.exports = (auth) => {
 			status: "My API is alive!"
 		});
 	});
-
+	router.post('/login', function (req, res) {
+		// 
+		res.status(200).json({result: 'Login Response'});
+	})
 	router.post("/user", auth.authenticate(), async function(req, res) {
 		try {
 			res.json(await users.getUser(req.user.id));
