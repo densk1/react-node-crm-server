@@ -14,7 +14,8 @@ module.exports = (auth) => {
 // router.use(authentication())
 // https://www.terlici.com/2014/09/29/express-router.html#router-specific-middlewares
 	
-	router.all("/", function(req, res) {  
+	router.all("/", function(req, res) {
+		res.cookie('cookieName',"cookiedata", {domain:'localhost'});
 		res.json({
 			status: "My API is alive!"
 		});
@@ -47,7 +48,8 @@ module.exports = (auth) => {
 					if ( await checkPass(password, result[0].password, result[0].salt ) ) {
                         console.log("// Login True");
 						// create cookie token here.
-						res.status(200).json({result: 'Login Response'});
+						//res.cookie('cookieName',"cookiedata", {domain:'localhost'});
+						res.status(200).json({result: true});
 					} 
 				}
 				

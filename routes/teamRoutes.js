@@ -51,6 +51,8 @@ module.exports = (auth) => {
     
 	router.get("/:teamIndex(\\d+)/leaguetable/", /*auth.authenticate(),*/ teamIndexer, function(req, res) {
         // function to get the actual TeamID from a particular database.
+		console.log(req.cookies);
+		
         let r = req.params;
 		let TeamID = req.params.TeamID;
         let Season = req.params.Season;

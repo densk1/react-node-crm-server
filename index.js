@@ -2,7 +2,8 @@
 
 // index.js
 const express = require("express");  
-const bodyParser = require("body-parser");  
+const bodyParser = require("body-parser");
+const cookieParser = require('cookie-parser');
 const auth = require("./auth.js")();  
 const app = express();
 const authRoutes = require('./routes/authRoutes.js')(auth);
@@ -10,13 +11,13 @@ const teamRoutes = require('./routes/teamRoutes.js')(auth);
 const morgan = require('morgan');
 
 app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
 
 app.use(morgan('dev'))
-
+app.use(cookieParser());
 app.use(bodyParser.json());  
 app.use(auth.initialize());
 
