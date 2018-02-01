@@ -6,6 +6,7 @@ const router = express.Router();
 const users = require("../users.js");  
 const cfg = require("../config.js");
 const db = require('../model/mysqlCon');
+const checkPass = require('../model/checkPass');
 
 module.exports = (auth) => {
 
@@ -19,8 +20,45 @@ module.exports = (auth) => {
 		});
 	});
 	router.post('/login', function (req, res) {
-		// 
-		res.status(200).json({result: 'Login Response'});
+		let emailAddress = req.body.emailAddress;
+		let password = req.body.password;
+		let stayLoggedIn = req.body.stayLoggedIn;
+		let query = `
+			SELECT 
+				PlayerID,
+				email,
+				password,
+				salt
+			FROM 
+				users 
+			WHERE 
+				email = ?`;
+		let query_params = [ emailAddress ];
+
+		db.query(
+			query, 
+			query_params, 
+			async function(error, result, fields) {
+				if(error) {
+					console.log(error.message);
+					res.status(500).json({result: "Server Error "});
+				}
+				if ( result.length == 1 ) {
+					if ( await checkPass(password, result[0].password, result[0].salt ) ) {
+                        console.log("// Login True");
+						// create cookie token here.
+						res.status(200).json({result: 'Login Response'});
+					} 
+				}
+				
+				// access denied
+				res.status(401).send('Login Failed'); 
+				// login doesn't exist
+				
+			}
+		);
+		
+		//res.status(200).json({result: 'Login Response'});
 	})
 	router.post("/user", auth.authenticate(), async function(req, res) {
 		try {
