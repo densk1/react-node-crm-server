@@ -50,16 +50,19 @@ module.exports = (auth) => {
                         let payload = {
                             id: result[0].PlayerID,
                         };
-                        res.cookie('cookieName',jwt.encode(payload, cfg.jwtSecret), {domain:'localhost'});
-						res.status(200).json({result: "true We win!!!"});
-					} 
-				}
-                // res.cookieRemove();
-				res.status(401);
+                        console.log('Server: Login Success');
+                        res.cookie('blrstkn',jwt.encode(payload, cfg.jwtSecret), {domain:'localhost'});
+                        res.status(200).json({result: true});
+                        return;
+					}
+				} 
+                console.log('Server: Login Failure');
+				res.status(401).json({result: false});
+                //res.cookieRemove();
 			}
 		);
 		
-		//res.status(200).json({result: 'Login Response'});
+
 	})
 	router.post("/user", auth.authenticate(), async function(req, res) {
 		try {

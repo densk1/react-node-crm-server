@@ -9,9 +9,9 @@ const db = require('../model/mysqlCon.js');
 
 module.exports = (auth) => { 
 	
-	router.get('/:teamIndex(\\d+)', /*auth.authenticate(),*/ teamIndexer, function (req, res) {
+	router.get('/:teamIndex(\\d+)', auth.authenticate(), teamIndexer, function (req, res) {
         let r = req.params
-        let PlayerID = 5;//r.PlayerID;
+        let PlayerID = r.id;
         let teamIndex = parseInt(r.teamIndex);
 		let query = `
 			SELECT 
@@ -49,10 +49,7 @@ module.exports = (auth) => {
 		);
     });  
     
-	router.get("/:teamIndex(\\d+)/leaguetable/", /*auth.authenticate(),*/ teamIndexer, function(req, res) {
-        // function to get the actual TeamID from a particular database.
-		console.log(req.cookies);
-		
+	router.get("/:teamIndex(\\d+)/leaguetable/", auth.authenticate(), teamIndexer, function(req, res) {
         let r = req.params;
 		let TeamID = req.params.TeamID;
         let Season = req.params.Season;
@@ -69,7 +66,7 @@ module.exports = (auth) => {
                 }
                 if ( result ) {
                     // User Data Sent
-                    res.json({ result });
+                    res.status(200).json({ result });
                 } else {
                     // No User Data Found
                     res.status(401).send('401');

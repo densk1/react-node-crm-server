@@ -1,9 +1,8 @@
 // teamIndexer.js
 const db = require('../model/mysqlCon.js');
 module.exports = (req, res, next) => {
-    let r = req.params;
-    let PlayerID = 5;//r.PlayerID;
-    let teamIndex = parseInt(r.teamIndex);
+    let PlayerID = req.user.id;
+    let teamIndex = parseInt(req.params.teamIndex);
     let query = `
         SELECT 
             p.TeamID AS TeamID,

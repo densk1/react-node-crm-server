@@ -5,9 +5,20 @@ const users = require("./users.js");
 const cfg = require("./config.js");
 const ExtractJwt = passportJWT.ExtractJwt;
 const Strategy = passportJWT.Strategy;
+
+const cookieExtractor = function(req) {
+    var token = null;
+    if (req && req.cookies)
+    {
+        token = req.cookies['blrstkn'];
+    }
+    return token;
+};
+
 const params = {
     secretOrKey: cfg.jwtSecret,
-    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
+    jwtFromRequest: cookieExtractor,
+    //jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
 };
 
 module.exports = function() {
