@@ -46,17 +46,16 @@ module.exports = (auth) => {
 				}
 				if ( result.length == 1 ) {
 					if ( await checkPass(password, result[0].password, result[0].salt ) ) {
-                        console.log("// Login True");
-						// create cookie token here.
-						//res.cookie('cookieName',"cookiedata", {domain:'localhost'});
-						res.status(200).json({result: true});
+
+                        let payload = {
+                            id: result[0].PlayerID,
+                        };
+                        res.cookie('cookieName',jwt.encode(payload, cfg.jwtSecret), {domain:'localhost'});
+						res.status(200).json({result: "true We win!!!"});
 					} 
 				}
-				
-				// access denied
-				res.status(401).send('Login Failed'); 
-				// login doesn't exist
-				
+                // res.cookieRemove();
+				res.status(401);
 			}
 		);
 		
