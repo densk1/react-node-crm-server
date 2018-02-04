@@ -37,7 +37,7 @@ const JWTstrategy = new Strategy(params, function(payload, done) {
 });
 
 // Add Strategies
-passport.use(JWTstrategy);
+passport.use('jwt', JWTstrategy);
 
 module.exports = function () {
 	return {

@@ -33,7 +33,7 @@ app.use(cookieParser());
 app.use(bodyParser.json());  
 app.use(passport.initialize());
 
-// Route handlers
+// ROUTES
 app.use('/auth', authRoutes);
 app.use('/team', teamRoutes);
 
