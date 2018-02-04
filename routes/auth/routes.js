@@ -26,7 +26,9 @@ const auth = {
 			async function(error, result, fields) {
 				if(error) {
 					console.log(error.message);
-					res.status(500).json({result: "Server Error "});
+					res.status(500).json({
+						result: "Server Error "
+					});
 				}
 				if ( result.length == 1 ) {
 					if ( await checkPass(password, result[0].password, result[0].salt ) ) {

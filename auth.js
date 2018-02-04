@@ -1,9 +1,9 @@
-// auth.js
+/*// auth.js
 const passport = require("passport");
 const passportJWT = require("passport-jwt");
-//const users = require("./users.js");
+
 const cfg = require("./JWTconfig.js");
-const ExtractJwt = passportJWT.ExtractJwt;
+//const ExtractJwt = passportJWT.ExtractJwt;
 const Strategy = passportJWT.Strategy;
 
 const cookieExtractor = function(req) {
@@ -39,4 +39,4 @@ module.exports = function() {
             return passport.authenticate("jwt", cfg.jwtSession);
         }
     };
-};
+};*/

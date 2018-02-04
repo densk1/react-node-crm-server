@@ -1,17 +1,18 @@
 const express = require("express");  
 const router = express.Router();
 const teamIndexer = require('./middleware/teamIndexer.js');
+
 const team = require("./routes.js");
 
 
-module.exports = (auth) => { 
+module.exports = (passport) => { 
 	router.get('/:teamIndex(\\d+)', 
-		auth.authenticate(), 
+		passport.authenticateJWT(), 
 		teamIndexer, 
 		team.teamIndex
 	);
 	router.get("/:teamIndex(\\d+)/leaguetable/", 
-		auth.authenticate(), 
+		passport.authenticateJWT(), 
 		teamIndexer, 
 		team.leagueTable
 	)
