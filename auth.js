@@ -1,20 +1,18 @@
 // auth.js
 const passport = require("passport");
 const passportJWT = require("passport-jwt");
-const users = require("./users.js");
-const cfg = require("./config.js");
+//const users = require("./users.js");
+const cfg = require("./JWTconfig.js");
 const ExtractJwt = passportJWT.ExtractJwt;
 const Strategy = passportJWT.Strategy;
 
 const cookieExtractor = function(req) {
     var token = null;
-    if (req && req.cookies)
-    {
+    if (req && req.cookies) {
         token = req.cookies['blrstkn'];
     }
     return token;
 };
-
 const params = {
     secretOrKey: cfg.jwtSecret,
     jwtFromRequest: cookieExtractor,

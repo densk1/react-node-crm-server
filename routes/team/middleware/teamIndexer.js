@@ -1,5 +1,5 @@
 // teamIndexer.js
-const db = require('../model/mysqlCon.js');
+const db = require('../../../model/mysqlCon.js');
 module.exports = (req, res, next) => {
     let PlayerID = req.user.id;
     let teamIndex = parseInt(req.params.teamIndex);
@@ -16,8 +16,7 @@ module.exports = (req, res, next) => {
 
         WHERE 
             PlayerID = ?
-        LIMIT 1 
-        OFFSET ?
+        LIMIT 1 OFFSET ?
     `;
     let query_params = [PlayerID, teamIndex];
     db.query(
@@ -31,8 +30,7 @@ module.exports = (req, res, next) => {
             if ( result.length == 1 ) {
                 result = result[0];
                 req.params.TeamID = result.TeamID;
-                req.params.Season = result.Season;
-                    
+                req.params.Season = result.Season;   
                 next();
             } else {
                 res.status(401).json({});

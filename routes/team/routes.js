@@ -1,15 +1,6 @@
-// teamRoutes.js
-
-//const jwt = require("jwt-simple");
-const express = require("express");  
-const router = express.Router();
-const teamIndexer = require('../middleware/teamIndexer.js');
-
-const db = require('../model/mysqlCon.js');
-
-module.exports = (auth) => { 
-	
-	router.get('/:teamIndex(\\d+)', auth.authenticate(), teamIndexer, function (req, res) {
+const db = require('../../model/mysqlCon.js');
+const team = {
+	teamIndex: function (req, res) {
         let r = req.params
         let PlayerID = r.id;
         let teamIndex = parseInt(r.teamIndex);
@@ -34,27 +25,23 @@ module.exports = (auth) => {
 			query, 
 			query_params, 
             function(error, result, fields) {
-
                 if(error) {
-                    console.log(error.message);
                     return res.status(500).json({result: "Server Error "});
                 }
-
 				if ( result.length == 1 ) {
-                    res.status(200).json( result[0] );
+                    res.status(200).json( result[0] ).send();
 				} else {
                     res.status(401).json({});
 				}
 			}
-		);
-    });  
-    
-	router.get("/:teamIndex(\\d+)/leaguetable/", auth.authenticate(), teamIndexer, function(req, res) {
-        let r = req.params;
+		)
+	},
+	leagueTable: function (req, res) {
+        //let r = req.params;
 		let TeamID = req.params.TeamID;
         let Season = req.params.Season;
 
-        let query = require('../queries/tablequery.sql');
+        let query = require('./queries/tablequery.sql');
 		let query_params = [Season, TeamID];
         db.query(
             query, 
@@ -66,13 +53,17 @@ module.exports = (auth) => {
                 }
                 if ( result ) {
                     // User Data Sent
-                    res.status(200).json({ result });
+					res.status(200).json({ result });
                 } else {
                     // No User Data Found
                     res.status(401).send('401');
                 }
             }
         );
-	})
-	return router;
+	},
+	previousSeason: function (req, res) {
+		
+	}
 }
+
+module.exports = team;

@@ -1,7 +1,5 @@
 // config.js
 module.exports = {  
     jwtSecret: "***REMOVED***!",
-    jwtSession: {
-        session: false
-    }
+    jwtSession: { session: false },
 };

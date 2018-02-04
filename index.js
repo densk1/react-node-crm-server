@@ -6,9 +6,11 @@ const bodyParser = require("body-parser");
 const cookieParser = require('cookie-parser');
 const auth = require("./auth.js")();  
 const app = express();
-const authRoutes = require('./routes/authRoutes.js')(auth);
-const teamRoutes = require('./routes/teamRoutes.js')(auth);
+const authRoutes = require('./routes/auth/')(auth);
+const teamRoutes = require('./routes/team/')(auth);
 const morgan = require('morgan');
+
+const PORT = 4000;
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -25,10 +27,7 @@ app.use('/auth', authRoutes);
 app.use('/team', teamRoutes);
 
 
-app.all('*', function (req, res) {
-	res.status(404).send("No route exists!");
-})
+app.all('*', (req, res) => res.status(404).send("No route!"))
 
-app.listen(4000, function() {  
-    console.log("My API is running... 4000");
-});
+
+app.listen( PORT, () => console.log("My API is running... "+PORT) );
