@@ -11,14 +11,14 @@ const team = {
 
 module.exports = (passport) => { 
 	router.get('/:teamIndex(\\d+)', 
-		passport.authenticateJWT(), 
+		passport.authenticate(), 
 		teamIndexer, 
 		team.teamIndex
 	);
 	router.get("/:teamIndex(\\d+)/leaguetable/", 
-		passport.authenticateJWT(), 
+		passport.authenticate(), 
 		teamIndexer, 
 		team.leagueTable
-	)
+	);
 	return router;
 }

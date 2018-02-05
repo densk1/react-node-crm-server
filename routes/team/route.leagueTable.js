@@ -1,4 +1,5 @@
 const db = require('../../model/mysqlCon.js');
+
 const leagueTable = function (req, res) {
 	let TeamID = req.params.TeamID;
 	let Season = req.params.Season;
@@ -23,6 +24,5 @@ const leagueTable = function (req, res) {
 		}
 	);
 }
-
 
 module.exports = leagueTable;

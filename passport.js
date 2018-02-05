@@ -5,7 +5,8 @@ const cfg = require("./JWTconfig.js");
 // Bearer Token 
 
 // const ExtractJwt = passportJWT.ExtractJwt;
-const Strategy = passportJWT.Strategy;
+const JWTStrategy = passportJWT.Strategy;
+const GoogleStrategy = require('passport-google-oauth20').Strategy
 
 
 const cookieExtractor = function(req) {
@@ -19,13 +20,11 @@ const cookieExtractor = function(req) {
 const params = {
     secretOrKey: cfg.jwtSecret,
     jwtFromRequest: cookieExtractor,
-	// Bearer Token 
     //jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
 };
 
-
 // Configure Strategies
-const JWTstrategy = new Strategy(params, function(payload, done) {
+const JWT = new JWTStrategy(params, function(payload, done) {
 	let user = payload.id;
 	if (user) {
 		return done(null,  {
@@ -36,18 +35,29 @@ const JWTstrategy = new Strategy(params, function(payload, done) {
 	}
 });
 
+const Google = new GoogleStrategy({
+    clientID: 'GOOGLE_CLIENT_ID',
+    clientSecret: 'GOOGLE_CLIENT_SxsECRET',
+    callbackURL: "http://www.example.com/auth/google/callback"
+  },
+  function(accessToken, refreshToken, profile, cb) {
+    User.findOrCreate({ googleId: profile.id }, function (err, user) {
+      return cb(err, user);
+    });
+  }
+)
+
 // Add Strategies
-passport.use('jwt', JWTstrategy);
+passport.use('jwt', JWT);
+passport.use('google', Google);
 
 module.exports = function () {
 	return {
 		initialize: function() {
 			return passport.initialize();
 		},
-		authenticateJWT: function() {
-            return passport.authenticate("jwt", cfg.jwtSession)
-		},
-		authenticateFB: {},
-		authenticateGoogle: {},
+		authenticate: function() {
+            return passport.authenticate(['jwt', 'google'], cfg.jwtSession)
+		}
 	}	
 }
