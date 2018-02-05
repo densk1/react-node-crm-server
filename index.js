@@ -8,7 +8,7 @@ const app = express();
 // TOOLS
 const cookieParser = require('cookie-parser');
 const bodyParser = require("body-parser");
-const passport = require("./passport.js")();  
+const passport = require("./passport/")();  
 
 // DEV
 const morgan = require('morgan');
