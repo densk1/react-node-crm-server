@@ -16,7 +16,8 @@ module.exports = function () {
 			return passport.initialize();
 		},
 		authenticate: function() {
-            return passport.authenticate(['jwt', 'google'], cfg.session)
+            return passport.authenticate('jwt', cfg.session)
+            //return passport.authenticate(['jwt', 'google'], cfg.session)
 		}
 	}	
 }

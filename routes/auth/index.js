@@ -13,6 +13,11 @@ module.exports = (auth) => {
 		res.cookie('cookieName', "cookiedata", {domain:'localhost'} );
 		res.json({ status: "TEST: My API is alive!" });
 	});
+	router.all('/checklogin',
+		auth.authenticate(),
+		function (req, res) {
+			return res.status(200).json({result: "logged IN GLOBAL"});
+	});
 	router.post('/login', login.local )
 
 	return router;
