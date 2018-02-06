@@ -20,5 +20,11 @@ module.exports = (passport) => {
 		teamIndexer, 
 		team.leagueTable
 	);
+
+    router.get("/:teamIndex(\\d+)/leaguetable/:season(\\d+)", 
+		passport.authenticate(), 
+		teamIndexer, 
+		team.leagueTable
+	);
 	return router;
 }

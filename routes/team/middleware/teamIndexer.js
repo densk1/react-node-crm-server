@@ -3,6 +3,7 @@ const db = require('../../../model/mysqlCon.js');
 module.exports = (req, res, next) => {
     let PlayerID = req.user.id;
     let teamIndex = parseInt(req.params.teamIndex);
+    const requestedSeason = parseInt(req.params.season);
     let query = `
         SELECT 
             p.TeamID AS TeamID,
@@ -30,7 +31,7 @@ module.exports = (req, res, next) => {
             if ( result.length == 1 ) {
                 result = result[0];
                 req.params.TeamID = result.TeamID;
-                req.params.Season = result.Season;   
+                req.params.Season = requestedSeason || result.Season;
                 next();
             } else {
                 res.status(401).json({});
