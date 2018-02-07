@@ -9,6 +9,7 @@ const app = express();
 const cookieParser = require('cookie-parser');
 const bodyParser = require("body-parser");
 const passport = require("./passport/")();  
+const mongoose = require('./model/mongoose.js')()
 
 // DEV
 const morgan = require('morgan');
