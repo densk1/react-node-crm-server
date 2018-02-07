@@ -5,11 +5,13 @@
 const express = require("express");  
 const app = express();
 
+// DATABASE
+const mongoose = require('./model/mongoose.js');
+
 // TOOLS
 const cookieParser = require('cookie-parser');
 const bodyParser = require("body-parser");
 const passport = require("./passport/")();  
-const mongoose = require('./model/mongoose.js')()
 
 // DEV
 const morgan = require('morgan');
@@ -17,6 +19,8 @@ const morgan = require('morgan');
 // ROUTE HANDLERS
 const authRoutes = require('./routes/auth/')(passport);
 const teamRoutes = require('./routes/team/')(passport);
+const crmRoutes = require('./routes/crm/')(passport);
+
 
 // ENV VARIABLES
 const PORT = 4000;
@@ -37,6 +41,7 @@ app.use(passport.initialize());
 // ROUTES
 app.use('/auth', authRoutes);
 app.use('/team', teamRoutes);
+app.use('/crm', crmRoutes);
 
 
 app.all('*', (req, res) => res.status(404));
