@@ -9,11 +9,10 @@ module.exports = (passport) => {
 // router.use(authentication())
 // https://www.terlici.com/2014/09/29/express-router.html#router-specific-middlewares
 	
-	router.all("/", (req, res) => {
-		//res.cookie('cookieName', "cookiedata", {domain:'localhost'} );
+	router.post("/", (req, res) => {
 		res.json({ status: "TEST: My API is alive!" });
 	});
-	router.all('/checklogin',
+	router.post('/checklogin',
 		passport.authenticate(),
         (req, res) => {
 			return res.status(200).json({result: "logged IN GLOBAL"});
