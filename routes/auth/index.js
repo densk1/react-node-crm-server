@@ -9,7 +9,7 @@ module.exports = (passport) => {
 // router.use(authentication())
 // https://www.terlici.com/2014/09/29/express-router.html#router-specific-middlewares
 	
-	router.post("/", (req, res) => {
+	router.post("/", function (req, res) {
 		res.json({ status: "TEST: My API is alive!" });
 	});
 	router.post('/checklogin',
@@ -18,6 +18,8 @@ module.exports = (passport) => {
 			return res.status(200).json({result: "logged IN GLOBAL"});
 	});
 	router.post('/login', login.local )
-
+	router.all('*', (req, res) => {
+		res.status(404);
+	});
 	return router;
 }

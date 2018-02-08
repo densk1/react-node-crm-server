@@ -21,16 +21,12 @@ const authRoutes = require('./routes/auth/')(passport);
 const teamRoutes = require('./routes/team/')(passport);
 const crmRoutes = require('./routes/crm/')(passport);
 
-
 // ENV VARIABLES
 const PORT = 4000;
 
 // HEADERS
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
+const cors = require('./cors');
+app.use(cors);
 
 // INITIALIZE
 app.use(morgan('dev'))

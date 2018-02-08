@@ -13,11 +13,11 @@ module.exports = (passport) => {
         
 		res.json({ status: "TEST: My API is alive!" });
 	});
-	router.get('/list/:clientID', passport.authenticate(), (req, res) => {
+	router.get('/list', passport.authenticate(), (req, res) => {
         console.log(req.user);
         console.log(req.params);
         new Client({
-            ownerID: req.user.id,
+            ownerID: 1,
             name: 'Carden',
             job: 'Digital Producer',
             company: 'indiepics',
@@ -25,7 +25,13 @@ module.exports = (passport) => {
         }).save();
         return res.status(200).json({result: "List Route"});
 	});
-
-
+	
+	router.all('/search', async (req, res) => {
+		res.status(200).send(await Client.find());
+		// pagination methods
+		//.skip(10));
+		//.limit(2));
+	});
+	
 	return router;
 }
