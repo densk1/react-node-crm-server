@@ -16,17 +16,17 @@ e.g.
 ### 1. CRM
 **a) /crm/list** (post)
 
-Returns a list from the database in order of:
+Returns a list of (20) names from the database in order of:
 - Alphabetical
 - Date edited
 
 
-**b) /crm/client/__:documentID__** (post)
+**b) /crm/client/:documentID** (post)
 
 Review a specific clients details.
 
 
-**c) /crm/client/__:documentID__/edit** (post)
+**c) /crm/client/:documentID/edit** (post)
 
 
 
@@ -48,3 +48,11 @@ Currently searches the name field for partials, I want to expand this to other f
 - with a status of 200
 
 
+**d) /crm/create** (post)
+
+A post route to create a new entry in the client database
+
+
+**d) /crm/delete/:documentID (post)
+
+A post route to delete a record.
