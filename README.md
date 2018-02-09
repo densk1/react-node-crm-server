@@ -53,6 +53,6 @@ Currently searches the name field for partials, I want to expand this to other f
 A post route to create a new entry in the client database
 
 
-**d) /crm/delete/:documentID (post)
+**e) /crm/delete/:documentID** (post)
 
 A post route to delete a record.
