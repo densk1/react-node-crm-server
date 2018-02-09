@@ -12,6 +12,7 @@
     "body-parser": "^1.18.2",
     "cookie-parser": "^1.4.3",
     "express": "^4.16.2",
+    "express-sanitize-escape": "^1.1.0",
     "jwt-simple": "^0.5.1",
     "mongo": "^0.1.0",
     "mongoose": "^5.0.3",

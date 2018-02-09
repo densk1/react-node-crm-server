@@ -11,6 +11,7 @@ const mongoose = require('./model/mongoose.js');
 // TOOLS
 const cookieParser = require('cookie-parser');
 const bodyParser = require("body-parser");
+const expressSanitized = require('express-sanitize-escape');
 const passport = require("./passport/")();  
 
 // DEV
@@ -36,6 +37,7 @@ app.use(function(req, res, next) {
 app.use(morgan('dev'))
 app.use(cookieParser());
 app.use(bodyParser.json());  
+app.use(expressSanitized.middleware());  
 app.use(passport.initialize());
 
 // ROUTES
