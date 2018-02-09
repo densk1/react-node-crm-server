@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 const clientSchema = new Schema({
     ownerID: Number,
     name: String,
-    job: String,
+    role: String,
     company: String,
     email: String,
 });
