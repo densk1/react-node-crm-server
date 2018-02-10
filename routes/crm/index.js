@@ -22,10 +22,12 @@ module.exports = (passport) => {
     });
 
     
-	router.post('/client/:clientID', (req, res) => {
+	router.post('/client/:clientID', async (req, res) => {
         // boostrap Card!
         console.log(req.user, req.params);
-        return res.status(200).json({result: "/client/:clientID Not yet Complete!"});
+		let result = await Client.find({"_id":req.params.clientID });
+		console.log(result);
+        return res.status(200).json(result);
 	});
 	router.post('/client/:clientID/edit', (req, res) => {
         console.log(req.user, req.params, req.body);
@@ -57,8 +59,8 @@ module.exports = (passport) => {
 		res.status(200).json({ result: "/Create route note yet built" });
 	});
     
-    router.post('/list', (req, res) => {
+/*    router.post('/list', (req, res) => {
         res.status(200).json({result: '/crm/list Not yet complete'});
-    })
+    })*/
 	return router;
 }
