@@ -11,8 +11,8 @@ module.exports = (passport) => {
     
 
     router.post('/list', (req, res) => {
-        let offset = req.body.offset || 3;
-        let amount = req.body.amount || 5;
+        let offset = req.body.offset || 0;
+        let amount = req.body.amount || 10;
         Client.find().skip(offset).limit(amount)
         .then( (result) => {
             res.status(200).json(result);
@@ -33,13 +33,16 @@ module.exports = (passport) => {
 	});
 	
     router.post('/search', async (req, res) => {
-        console.log(req.body);
-        const result = await Client.find({
-            name: new RegExp(".*" + req.body.query+ ".*")
-        });
-        // const result = Client.find({name: req.body });
-        console.log(result);
-        res.status(200).json({});
+		let query = await new RegExp(".*" + req.body.query+ ".*", "i");
+        const result = await Client.find({ 
+			$or: [
+				{name: query }, 
+				{email: query }, 
+				{role: query }, 
+				{company: query }
+			]
+		});
+        res.status(200).json(result);
     });
 	router.post("/create", (req, res) => {
         /*
