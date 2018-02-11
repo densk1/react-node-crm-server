@@ -5,6 +5,7 @@ const crmRoutes = require("./routes.js");
 
 const mongoose = require('mongoose');
 const Client = mongoose.model('clients');
+const Comment = mongoose.model('comment');
 
 module.exports = (passport) => {
     router.use(passport.authenticate());
@@ -22,13 +23,31 @@ module.exports = (passport) => {
     });
 
     
-	router.post('/client/:clientID', async (req, res) => {
-        // boostrap Card!
-        console.log(req.user, req.params);
-		let result = await Client.find({"_id":req.params.clientID });
-		console.log(result);
+	router.post('/client/', async (req, res) => {
+		let result = await Client.findOne({_id:req.body.clientID });
         return res.status(200).json(result);
 	});
+	
+	
+	router.post('/client/comments', async (req, res) => {
+		let result = await Comment.find({clientID: req.body.clientID});
+		console.log(result);
+		res.status(200).json(result);
+	});
+	router.post('/client/comment/add', async (req, res) => {
+		let {clientID, comment} = req.body;
+         await new Comment({
+			clientID,
+			comment,
+			added: new Date(),
+			addedBy: 'AuthorID'
+        }).save();
+		let result = await Comment.find({}).sort({_id:-1}).limit(1)
+
+
+        // need to return the new entry and add it to the top of the list
+		res.status(200).json(result);
+	})
 	router.post('/client/:clientID/edit', (req, res) => {
         console.log(req.user, req.params, req.body);
         return res.status(200).json({result: "List Route"});
