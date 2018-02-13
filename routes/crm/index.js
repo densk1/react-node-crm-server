@@ -31,22 +31,22 @@ module.exports = (passport) => {
 	
 	router.post('/client/comments', async (req, res) => {
 		let result = await Comment.find({clientID: req.body.clientID});
-		console.log(result);
 		res.status(200).json(result);
 	});
 	router.post('/client/comment/add', async (req, res) => {
 		let {clientID, comment} = req.body;
-         await new Comment({
-			clientID,
-			comment,
-			added: new Date(),
-			addedBy: 'AuthorID'
-        }).save();
-		let result = await Comment.find({}).sort({_id:-1}).limit(1)
-
-
-        // need to return the new entry and add it to the top of the list
-		res.status(200).json(result);
+		if (comment.length > 5 ) {
+			await new Comment({
+				clientID,
+				comment,
+				added: new Date(),
+				addedBy: 'AuthorID'
+			}).save();
+			let result = await Comment.find({}).sort({_id:-1}).limit(1);
+			res.status(200).json(result);
+		} else {
+			res.status(200).json(null);
+		}
 	})
 	router.post('/client/:clientID/edit', (req, res) => {
         console.log(req.user, req.params, req.body);
@@ -77,9 +77,5 @@ module.exports = (passport) => {
         */
 		res.status(200).json({ result: "/Create route note yet built" });
 	});
-    
-/*    router.post('/list', (req, res) => {
-        res.status(200).json({result: '/crm/list Not yet complete'});
-    })*/
 	return router;
 }
