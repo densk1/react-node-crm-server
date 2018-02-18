@@ -5,6 +5,7 @@ const crmRoutes = require("./routes.js");
 
 const mongoose = require('mongoose');
 const Client = mongoose.model('clients');
+const Contact = mongoose.model('contacts');
 const Comment = mongoose.model('comment');
 
 module.exports = (passport) => {
@@ -14,7 +15,7 @@ module.exports = (passport) => {
     router.post('/list', (req, res) => {
         let offset = req.body.offset || 0;
         let amount = req.body.amount || 10;
-        Client.find().skip(offset).limit(amount)
+        Contact.find().skip(offset).limit(amount)
         .then( (result) => {
             res.status(200).json(result);
         }).catch( (err) => {
@@ -24,7 +25,7 @@ module.exports = (passport) => {
 
     
 	router.post('/client/', async (req, res) => {
-		let result = await Client.findOne({_id:req.body.clientID });
+		let result = await Contact.findOne({_id:req.body.clientID });
         return res.status(200).json(result);
 	});
 	
@@ -65,16 +66,29 @@ module.exports = (passport) => {
 		});
         res.status(200).json(result);
     });
-	router.post("/create", (req, res) => {
-        /*
-        new Client({
-            ownerID: 1,
-            name: 'Carden',
-            job: 'Digital Producer',
-            company: 'indiepics',
-            email: 'carden.k@indiepics.ie', 
-        }).save();
-        */
+	router.post("/contact/new", (req, res) => {
+		/*
+		const {
+			firstName,
+			secondName,
+			email,
+			organisation,
+			address1,
+			city,
+			postcode,
+			country,
+			office,
+			extension,
+			desk,
+			mobile,
+			address2
+		} = req.body.newContact.values;
+		*/
+		let newContact = req.body.newContact.values;
+		// Must add in Upsert here
+		// Must add in too Many requests handler
+        new Contact( {...newContact} ).save();
+        
 		res.status(200).json({ result: "/Create route note yet built" });
 	});
 	return router;
