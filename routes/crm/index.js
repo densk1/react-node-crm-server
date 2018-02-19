@@ -49,19 +49,23 @@ module.exports = (passport) => {
 			res.status(200).json(null);
 		}
 	})
-	router.post('/client/:clientID/edit', (req, res) => {
-        console.log(req.user, req.params, req.body);
-        return res.status(200).json({result: "List Route"});
+	router.post('/client/update', async (req, res) => {
+        console.log(req.body.values);
+        let { _id } = req.body.values;
+        await Contact.findByIdAndUpdate(_id, req.body.values, {upsert: true})
+        let result = await Contact.findById(_id);
+        return res.status(200).json(result);
 	});
 	
     router.post('/search', async (req, res) => {
 		let query = await new RegExp(".*" + req.body.query+ ".*", "i");
-        const result = await Client.find({ 
+        const result = await Contact.find({ 
 			$or: [
-				{name: query }, 
+				{firstName: query }, 
+				{secondName: query }, 
 				{email: query }, 
 				{role: query }, 
-				{company: query }
+				{organisation: query }
 			]
 		});
         res.status(200).json(result);
