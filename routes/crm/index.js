@@ -84,11 +84,12 @@ module.exports = (passport) => {
 	router.post("/contact/new", (req, res) => {
 
 		let newContact = req.body.newContact.values;
+		console.log(newContact);
 		// Must add in Upsert here
 		// Must add in too Many requests handler
         new Contact( {...newContact} ).save();
         
-		res.status(200).json({ result: "/Create route note yet built" });
+		return 	res.status(200).json({ result: "/Create route note yet built" });
 	});
 	return router;
 }
