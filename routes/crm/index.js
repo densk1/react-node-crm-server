@@ -56,7 +56,18 @@ module.exports = (passport) => {
         let result = await Contact.findById(_id);
         return res.status(200).json(result);
 	});
-	
+	router.post('/client/comment/delete', async (req, res) =>{
+        let { commentID, clientID } = req.body;
+        // 1. Find and delete comments
+        // 2. get and return updated list.
+
+        
+        Comment.findById( commentID ).remove().exec();
+		let result = await Comment.find({clientID: req.body.clientID});
+		return res.status(200).json(result);
+
+        
+    })
     router.post('/search', async (req, res) => {
 		let query = await new RegExp(".*" + req.body.query+ ".*", "i");
         const result = await Contact.find({ 
@@ -71,23 +82,7 @@ module.exports = (passport) => {
         res.status(200).json(result);
     });
 	router.post("/contact/new", (req, res) => {
-		/*
-		const {
-			firstName,
-			secondName,
-			email,
-			organisation,
-			address1,
-			city,
-			postcode,
-			country,
-			office,
-			extension,
-			desk,
-			mobile,
-			address2
-		} = req.body.newContact.values;
-		*/
+
 		let newContact = req.body.newContact.values;
 		// Must add in Upsert here
 		// Must add in too Many requests handler
