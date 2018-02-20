@@ -14,7 +14,7 @@ module.exports = (passport) => {
 
     router.post('/list', (req, res) => {
         let offset = req.body.offset || 0;
-        let amount = req.body.amount || 10;
+        let amount = req.body.amount || null;
         Contact.find().skip(offset).limit(amount)
         .then( (result) => {
             res.status(200).json(result);
