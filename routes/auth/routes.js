@@ -34,7 +34,7 @@ const auth = {
 					if ( await checkPass(password, result[0].password, result[0].salt ) ) {
 						let payload = { id: result[0].PlayerID };
 						//console.log('Server: Login Success');
-						res.cookie('blrstkn',jwt.encode(payload, cfg.jwtSecret), {domain:'localhost'});
+						res.cookie('blrstkn',jwt.encode(payload, cfg.jwtSecret), {path:'/'});
 						res.status(200).json({result: true});
 						return;
 					}
@@ -44,7 +44,13 @@ const auth = {
 			}
 		);
 	},
-	facebook: function(req, res) {
+	logout: function(req, res) {
+		//res.cookie('blrstkn','', {path:'/'});
+		res.clearCookie('blrstkn', {path:'/'});
+        res.status(200).json({result: true});  
+        return;
+	},
+    facebook: function(req, res) {
 		
 	},
 }

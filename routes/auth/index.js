@@ -15,9 +15,12 @@ module.exports = (passport) => {
 	router.post('/checklogin',
 		passport.authenticate(),
         (req, res) => {
-			return res.status(200).json({result: "logged IN GLOBAL"});
+			return res.status(200).json({result: true});
 	});
 	router.post('/login', login.local )
+	router.post('/logout', login.logout )
+    
+    
 /*	router.all('*', (req, res) => {
 		res.status(404);
 	});*/
