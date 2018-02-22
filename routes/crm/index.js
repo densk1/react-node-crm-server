@@ -50,7 +50,6 @@ module.exports = (passport) => {
 		}
 	})
 	router.post('/client/update', async (req, res) => {
-        console.log(req.body.values);
         let { _id } = req.body.values;
         await Contact.findByIdAndUpdate(_id, req.body.values, {upsert: true})
         let result = await Contact.findById(_id);
@@ -81,15 +80,23 @@ module.exports = (passport) => {
 		});
         res.status(200).json(result);
     });
-	router.post("/contact/new", (req, res) => {
+	router.post("/contact/new", async (req, res) => {
 
 		let newContact = req.body.newContact.values;
-		console.log(newContact);
 		// Must add in Upsert here
 		// Must add in too Many requests handler
-        new Contact( {...newContact} ).save();
-        
-		return 	res.status(200).json({ result: "/Create route note yet built" });
+		
+        await new Contact( {...newContact} ).save();
+		let { email, firstName, secondName } = newContact;
+		let newEntry = await Contact.findOne({ email, firstName, secondName })
+		let newUserID = await newEntry._id;
+		return 	res.status(200).json(newUserID);
+	});
+	router.post("/contact/delete", async (req, res) => {
+		console.log(req.body.contactID);
+		let delID = req.body.contactID;
+		await Contact.remove( { _id: delID });
+		return res.status(200).json(delID);
 	});
 	return router;
 }
