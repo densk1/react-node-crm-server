@@ -5,10 +5,8 @@ module.exports = async function( password, passwordHash, passwordSalt) {
         pw = await sha( pw + passwordSalt); 
     }
     if ( pw == passwordHash ) {
-        //console.log("pw is true")
         return true;
     } else {
-        //console.log("pw is false")
         return false;
     }
 }

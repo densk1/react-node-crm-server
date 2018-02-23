@@ -3,8 +3,37 @@ const cfg = require("../../JWTconfig.js");
 const db = require('../../model/mysqlCon');
 const checkPass = require('../../model/checkPass');
 
+const mongoose = require('mongoose');
+const User = mongoose.model('user');
+
 const auth = {
-	local: function (req, res) {
+	local: async (req, res) => {
+		let { 
+			emailAddress, 
+			password, 
+			//stayLoggedIn 
+		} = req.body;
+		const userExists = await User.findOne({email: emailAddress });
+		if ( userExists ) {
+			const {
+				_id,
+				firstName,
+				secondName,
+				email,
+				passwordHash,
+				passwordSalt,
+			} = userExists;
+			if ( await checkPass(password, passwordHash, passwordSalt ) ) {
+				let payload = { id: _id, email };
+				res.cookie('blrstkn',jwt.encode(payload, cfg.jwtSecret), {path:'/'});
+				
+				return res.status(200).json({result: {firstName,secondName,email}});
+			}
+		}
+		return res.status(401).json({result: "login failed"});
+		
+	},
+	/*localSQL: function (req, res) {
 		let emailAddress = req.body.emailAddress;
 		let password = req.body.password;
 		let stayLoggedIn = req.body.stayLoggedIn;
@@ -43,7 +72,7 @@ const auth = {
 				res.status(401).json({result: false});
 			}
 		);
-	},
+	},*/
 	logout: function(req, res) {
 		//res.cookie('blrstkn','', {path:'/'});
 		res.clearCookie('blrstkn', {path:'/'});

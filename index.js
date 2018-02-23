@@ -21,6 +21,7 @@ const morgan = require('morgan');
 const authRoutes = require('./routes/auth/')(passport);
 const teamRoutes = require('./routes/team/')(passport);
 const crmRoutes = require('./routes/crm/')(passport);
+const accountRoutes = require('./routes/account/')(passport);
 
 // ENV VARIABLES
 const PORT = 4000;
@@ -40,6 +41,7 @@ app.use(passport.initialize());
 app.use('/auth', authRoutes);
 app.use('/team', teamRoutes);
 app.use('/crm', crmRoutes);
+app.use('/account', accountRoutes);
 
 
 app.all('*', (req, res) => res.status(404));
