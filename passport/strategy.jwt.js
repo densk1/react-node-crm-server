@@ -3,6 +3,10 @@ const passportJWT = require("passport-jwt");
 const JWTStrategy = passportJWT.Strategy;
 const cfg = require("../JWTconfig.js");
 
+const mongoose = require('mongoose');
+const User = mongoose.model('user');
+
+
 const cookieExtractor = function(req) {
     var token = null;
     if (req && req.cookies) {
@@ -19,11 +23,14 @@ const params = {
 };
 
 
-const JWT = new JWTStrategy(params, function(payload, done) {
+const JWT = new JWTStrategy(params, async function(payload, done) {
 	let user = payload.id;
 	if (user) {
-		return done(null,  {
-			id: user
+        let theUser = await User.findById({_id: user});
+        const {
+            firstName, secondName, email, admin
+        } = theUser;
+		return done(null,  { id: user, firstName, secondName, email, admin
 		});
 	} else {
 		return done(new Error("User not found"), null);

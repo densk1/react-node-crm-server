@@ -47,9 +47,39 @@ const routes = {
 		}).save();
 		
 		return res.status(200).json({result: "User added."});
-	}
+	},
+    updatePassword: async (req, res) =>{
+        const {
+            oldpassword,
+            newpassword,
+            newpasswordcheck,
+        } = req.body;
+        const { id } = req.user;
+        try {
+            let findUser = await User.findById({_id: id} );
+            if ( findUser ) {
+                const {
+                    passwordHash,
+                    passwordSalt,
+                } = findUser;
+                if ( await checkPass(oldpassword, passwordHash, passwordSalt ) ) {
+                    const passwordSalt = await getSalt();
+                    const passwordHash = await createHash(newpassword, passwordSalt);
+                    let result = await User.findByIdAndUpdate({_id: id}, {passwordHash, passwordSalt})
+                    return res.status(200).json(true)
+                }
+            } 
+            return res.status(401).json(false);
+        } catch (e) {
+            console.log(e);
+            return res.status(500).json(false);
+        }
+        
+        
+        
+        
+    }
 }
-
 
 module.exports = routes;
 
