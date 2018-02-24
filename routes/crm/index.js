@@ -22,26 +22,22 @@ module.exports = (passport) => {
             res.status(500).end();
         });
     });
-
-    
 	router.post('/client/', async (req, res) => {
 		let result = await Contact.findOne({_id:req.body.clientID });
         return res.status(200).json(result);
 	});
-	
-	
 	router.post('/client/comments', async (req, res) => {
 		let result = await Comment.find({clientID: req.body.clientID});
 		res.status(200).json(result);
 	});
 	router.post('/client/comment/add', async (req, res) => {
-		let {clientID, comment} = req.body;
+		let {clientID, comment, author} = req.body;
 		if (comment.length > 5 ) {
 			await new Comment({
 				clientID,
 				comment,
 				added: new Date(),
-				addedBy: 'AuthorID'
+				addedBy: author
 			}).save();
 			let result = await Comment.find({}).sort({_id:-1}).limit(1);
 			res.status(200).json(result);
@@ -57,15 +53,9 @@ module.exports = (passport) => {
 	});
 	router.post('/client/comment/delete', async (req, res) =>{
         let { commentID, clientID } = req.body;
-        // 1. Find and delete comments
-        // 2. get and return updated list.
-
-        
         Comment.findById( commentID ).remove().exec();
 		let result = await Comment.find({clientID: req.body.clientID});
-		return res.status(200).json(result);
-
-        
+		return res.status(200).json(result); 
     })
     router.post('/search', async (req, res) => {
 		let query = await new RegExp(".*" + req.body.query+ ".*", "i");
@@ -81,11 +71,7 @@ module.exports = (passport) => {
         res.status(200).json(result);
     });
 	router.post("/contact/new", async (req, res) => {
-
 		let newContact = req.body.newContact.values;
-		// Must add in Upsert here
-		// Must add in too Many requests handler
-		
         await new Contact( {...newContact} ).save();
 		let { email, firstName, secondName } = newContact;
 		let newEntry = await Contact.findOne({ email, firstName, secondName })

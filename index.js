@@ -27,7 +27,7 @@ const accountRoutes = require('./routes/account/')(passport);
 const PORT = 4000;
 
 // HEADERS
-const cors = require('./cors');
+const cors = require('./config/cors');
 app.use(cors);
 
 // INITIALIZE

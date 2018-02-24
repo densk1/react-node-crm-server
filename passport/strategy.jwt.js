@@ -1,7 +1,7 @@
 // const passport = require("passport");
 const passportJWT = require("passport-jwt");
 const JWTStrategy = passportJWT.Strategy;
-const cfg = require("../JWTconfig.js");
+const cfg = require("../config/JWTconfig.js");
 
 const mongoose = require('mongoose');
 const User = mongoose.model('user');

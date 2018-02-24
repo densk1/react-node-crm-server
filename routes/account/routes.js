@@ -1,5 +1,5 @@
 const jwt = require("jwt-simple");
-const cfg = require("../../JWTconfig.js");
+const cfg = require("../../config/JWTconfig.js");
 const db = require('../../model/mysqlCon');
 const checkPass = require('../../model/checkPass');
 const sha = require('sha256');
@@ -11,7 +11,6 @@ const getSalt = () => {
 	return Math.random().toString(36).slice(-10);
 }
 
-
 const createHash = async ( password, salt) => {
     let pw = sha( password + salt);     
     for(var round = 0; round < 65536; round++) { 
@@ -22,7 +21,6 @@ const createHash = async ( password, salt) => {
 
 const routes = {
 	adduser: async (req, res) => {
-		//console.log(req.body.values);
 		const {
 			email,
 			firstName,
@@ -30,9 +28,9 @@ const routes = {
 			password,
 		} = req.body.values;
 
-		if ( await User.findOne({email}) ) {
+		if ( await User.findOne({email}) || !req.user.admin ) {
 			return res.status(401).json({result: "User Exists!"});
-		}		
+		}
 		const passwordSalt = await getSalt();
 		const passwordHash = await createHash(password, passwordSalt);
 
@@ -48,7 +46,7 @@ const routes = {
 		
 		return res.status(200).json({result: "User added."});
 	},
-    updatePassword: async (req, res) =>{
+    updatePassword: async (req, res) => {
         const {
             oldpassword,
             newpassword,
@@ -73,37 +71,69 @@ const routes = {
         } catch (e) {
             console.log(e);
             return res.status(500).json(false);
-        }
-        
-        
-        
-        
-    }
+        } 
+    },
+	getUsers: async (req, res) => {
+		const {
+			userID,
+			admin,
+		} =  req.body;
+		
+		if ( req.user.admin ) {
+			try {
+				let result = await User.find();
+				return res.status(200).json({result})
+			} catch (e) {
+				return res.status(500).json(false);
+			}
+		}
+		return res.status(401).json(false);
+	},
+	updateUser: async (req, res) => {
+		const {
+			userID
+		} =  req.body;
+
+		if ( req.user.admin && (userID !== req.user.id)  ) {
+			try {
+				const admin = req.body.admin ? false : true;
+				let result = await User.findByIdAndUpdate({_id: userID}, {admin})
+				const {
+					_id,
+					email,
+					firstName,
+					secondName,
+				} = result;
+				return res.status(200).json({
+					_id,
+					email,
+					firstName,
+					secondName,
+					admin
+				})
+			} catch (e) {
+				console.log(e)
+				return res.status(500).json(false);
+			}
+		}
+		return res.status(401).json(false);
+	},
+	deleteUser: async (req, res) => {
+		const {
+			delUserID, index
+		} =  req.body;
+		if ( req.user.admin && (delUserID !== req.user.id)  ) {
+			try {
+				/*let result = await User.remove({_id: delUserID }).exec();
+				console.log(result);
+				*/return res.status(200).json({delUserID, index});
+			} catch (e) {
+				console.log(e)
+				return res.status(500).json(false);
+			}
+		}
+		return res.status(401).json(false);
+	}
 }
 
 module.exports = routes;
-
-
-
-/*
-async function(error, result, fields) {
-				if(error) {
-					console.log(error.message);
-					res.status(500).json({
-						result: "Server Error "
-					});
-				}
-				if ( result.length == 1 ) {
-					if ( await checkPass(password, result[0].password, result[0].salt ) ) {
-						let payload = { id: result[0].PlayerID };
-						//console.log('Server: Login Success');
-						res.cookie('blrstkn',jwt.encode(payload, cfg.jwtSecret), {path:'/'});
-						res.status(200).json({result: true});
-						return;
-					}
-				} 
-				//console.log('Server: Login Failure');
-				res.status(401).json({result: false});
-			}
-
-*/

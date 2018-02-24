@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const keys = require('../keys.js');
+const keys = require('../config/keys.js');
 const clientSchema = require('./schema.client.js');
 const contactSchema = require('./schema.contact.js');
 const commentSchema = require('./schema.comment.js');
