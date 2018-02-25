@@ -11,9 +11,7 @@ module.exports = (passport) => {
 	router.post("/users/update",  account.updateUser);
 	router.post("/users/delete",  account.deleteUser);
 	router.post("/update/password",  account.updatePassword);
-    
-	router.all('*', (req, res) => {
-		res.status(404);
-	});
+	router.post("/import", account.import);
+	router.all('*', (req, res) => { res.status(404) });
 	return router;
 }

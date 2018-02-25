@@ -10,7 +10,7 @@ mongoose.connect(keys.mongoURI);
 
 mongoose.model('clients', clientSchema);
 mongoose.model('contacts', contactSchema);
-mongoose.model('comment', commentSchema);
+mongoose.model('comments', commentSchema);
 mongoose.model('user', userSchema);
 
 module.exports = mongoose;

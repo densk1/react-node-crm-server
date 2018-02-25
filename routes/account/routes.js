@@ -6,11 +6,12 @@ const sha = require('sha256');
 
 const mongoose = require('mongoose');
 const User = mongoose.model('user');
+const Contact = mongoose.model('contacts');
+const Comment = mongoose.model('comments');
 
 const getSalt = () => {
 	return Math.random().toString(36).slice(-10);
 }
-
 const createHash = async ( password, salt) => {
     let pw = sha( password + salt);     
     for(var round = 0; round < 65536; round++) { 
@@ -18,7 +19,6 @@ const createHash = async ( password, salt) => {
     }
 	return pw;
 }	
-
 const routes = {
 	adduser: async (req, res) => {
 		const {
@@ -124,15 +124,46 @@ const routes = {
 		} =  req.body;
 		if ( req.user.admin && (delUserID !== req.user.id)  ) {
 			try {
-				/*let result = await User.remove({_id: delUserID }).exec();
-				console.log(result);
-				*/return res.status(200).json({delUserID, index});
+				return res.status(200).json({delUserID, index});
 			} catch (e) {
 				console.log(e)
 				return res.status(500).json(false);
 			}
 		}
 		return res.status(401).json(false);
+	},
+	import: async (req, res) => {
+		const { email, firstName, secondName, role, organisation } = req.body
+		const fn = () => {
+			return req.body.comments;
+		}
+		function remove(array, element) {
+			return array.filter(e => e !== element);
+		}
+
+		let comments = await fn();
+		comments = remove(comments, "")
+		await delete req.body.comments;
+		let query = { email, firstName, secondName, role, organisation },
+			update = { ...req.body },
+			options = { upsert: true, new: true, setDefaultsOnInsert: true };
+		let result = await Contact.findOneAndUpdate(query, update, options)
+		if (!result) return res.status(500).json(false);
+		
+		delete result;
+		let author = req.user.firstName+" (import)" || " (import)";
+		let commentResult = await comments.map( async (d) => {
+			if ( d ) { 
+				await new Comment({
+					clientID: result._id,
+					comment: d,
+					added: new Date(),
+					addedBy: author
+				}).save();
+			}
+		})
+		
+		return res.status(200).json(true);
 	}
 }
 

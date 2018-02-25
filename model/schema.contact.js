@@ -9,6 +9,7 @@ const contactSchema = new Schema({
 	secondName: String,
 	email: String,
 	organisation: String,
+	status: String,
 	role: String,
 	office: String,
 	extension: String,
@@ -18,6 +19,8 @@ const contactSchema = new Schema({
 	address2: String,
 	city: String,
 	postcode: String,
+	country: String,
+	//comments: [String],
 });
 
 module.exports = contactSchema;
