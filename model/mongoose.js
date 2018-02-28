@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const keys = require('../config/keys.js');
-const clientSchema = require('./schema.client.js');
 const contactSchema = require('./schema.contact.js');
 const commentSchema = require('./schema.comment.js');
 const userSchema = require('./schema.user.js');
@@ -8,7 +7,6 @@ const userSchema = require('./schema.user.js');
 // Schemas
 mongoose.connect(keys.mongoURI);
 
-mongoose.model('clients', clientSchema);
 mongoose.model('contacts', contactSchema);
 mongoose.model('comments', commentSchema);
 mongoose.model('user', userSchema);

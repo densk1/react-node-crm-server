@@ -18,7 +18,40 @@ const createHash = async ( password, salt) => {
         pw = await sha( pw + salt); 
     }
 	return pw;
-}	
+}
+// Add in a default admin user when the DB is setup
+async function  createDefaultUser  () {
+	let newHash = await createHash("password", "password")
+	console.log("create User");
+	await User.update(
+	{
+		email: "info@example.com"
+	}, 
+	{
+		firstName: "Admin",
+		secondName: "User",
+		email: "info@example.com",
+		passwordHash: newHash,
+		passwordSalt:"password",
+		admin: true,
+		added: new Date(),
+	},
+	{ 
+		upsert: true, 
+		new: true, 
+		setDefaultsOnInsert: true 
+	}, 
+		(err, doc) => {
+			if (err) {
+				 //console.error(err);
+			}
+			 console.log(doc);
+		}
+	);
+	 console.log(result);
+	
+}
+createDefaultUser();
 const routes = {
 	adduser: async (req, res) => {
 		const {
@@ -166,5 +199,4 @@ const routes = {
 		return res.status(200).json(true);
 	}
 }
-
 module.exports = routes;

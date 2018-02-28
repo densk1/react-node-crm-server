@@ -1,14 +1,10 @@
 // passport.js
 const passport = require("passport");
-
 const strategyJWT = require('./strategy.jwt.js');
-const strategyGoogle = require('./strategy.google.js');
-
 const cfg = require("../config/JWTconfig.js");
 
 // Add Strategies
 passport.use('jwt', strategyJWT);
-passport.use('google', strategyGoogle);
 
 module.exports = function () {
 	return {
