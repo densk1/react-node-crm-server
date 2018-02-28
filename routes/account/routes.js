@@ -147,8 +147,10 @@ const routes = {
 		const {
 			delUserID, index
 		} =  req.body;
+		
 		if ( req.user.admin && (delUserID !== req.user.id)  ) {
 			try {
+				let result = await User.remove({_id: delUserID }).exec();
 				return res.status(200).json({delUserID, index});
 			} catch (e) {
 				console.log(e)
