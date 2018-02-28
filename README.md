@@ -1,58 +1,28 @@
-# node-ballers
-A nodeJS server for Ballers
-
-### de-coupling route function from route handler
-names should follow URLS, with dashes imstead of slashes in the funtions
-e.g.
-    app.get('/team/n/leaguetable', team-n-leagueTable)
-    
-    // filename
-    // team.n.leaguetable.jsx
+# react-node-crm-server
+A node server for [react-boostrap-crm](https://github.com/densk1/react-bootstrap-crm).
 
 
+### Setup
+1. add in your own .env variables.
+2. git clone & npm install
+3. npm start
 
-## routes
+#### .env variables required in root folder
 
-### 1. CRM
-**a) /crm/list** (post)
+```
+#server
+PORT=4000
 
-Returns a list of (20) names from the database in order of:
-- Alphabetical
-- Date edited
+#JWT
+JWTSECRET= #Cookie secret for JWT keys.
 
+#Mongo
+MONGOURI=mongodb://user:password@ds100000.mlab.com:00000/collection-name
 
-**b) /crm/client/:documentID** (post)
+# MySQL DB
+SQLHOST=localhost
+SQLUSER=root
+SQLPASSWORD=
+SQLDB=Ballers
 
-Review a specific clients details.
-
-
-**c) /crm/client/:documentID/edit** (post)
-
-
-
-**d) /crm/search** (post)
-
-Currently searches the name field for partials, I want to expand this to other fields:
-- [ ] name
-- [ ] emailaddress
-- [ ] company
-- [ ] role
-
-**=> request**
-- must include `body:{ query: 'name' }`
-
-
-**=> response**
-- Returns JSON object 
-- Schema type Client 
-- with a status of 200
-
-
-**d) /crm/create** (post)
-
-A post route to create a new entry in the client database
-
-
-**e) /crm/delete/:documentID** (post)
-
-A post route to delete a record.
+```
