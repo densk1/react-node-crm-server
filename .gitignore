@@ -23,4 +23,5 @@ yarn-error.log*
 # settings files
 ._*
 
+# Keys
 /config
