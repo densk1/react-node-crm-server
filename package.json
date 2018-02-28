@@ -12,6 +12,7 @@
   "dependencies": {
     "body-parser": "^1.18.2",
     "cookie-parser": "^1.4.3",
+    "dotenv": "^5.0.1",
     "express": "^4.16.2",
     "express-sanitize-escape": "^1.1.0",
     "jwt-simple": "^0.5.1",

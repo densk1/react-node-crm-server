@@ -4,6 +4,8 @@
 // APP
 const express = require("express");  
 const app = express();
+const dotenv = require("dotenv").config();
+
 
 // DATABASE
 const mongoose = require('./model/mongoose.js');
@@ -45,4 +47,4 @@ app.use('/account', accountRoutes);
 
 
 app.all('*', (req, res) => res.status(404));
-app.listen( PORT, () => console.log("Running on port: "+PORT) );
+app.listen( process.env.PORT, () => console.log("Running on port: "+process.env.PORT) );

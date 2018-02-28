@@ -1,6 +1,4 @@
-// JWTconfig.js // excluded
 module.exports = {  
-    jwtSecret: "***REMOVED***!",
+    jwtSecret: process.env.JWTSECRET,
     session: { session: false },
 };
-

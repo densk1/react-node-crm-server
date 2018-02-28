@@ -3,7 +3,7 @@ const router = express.Router();
 const crmRoutes = require("./routes.js");
 
 const mongoose = require('mongoose');
-const Client = mongoose.model('clients');
+//const Client = mongoose.model('clients');
 const Contact = mongoose.model('contacts');
 const Comment = mongoose.model('comments');
 
